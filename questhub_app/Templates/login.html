@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Login
+{% endblock %}
+
+{% block body %}
+<style>
+    body{
+      background-image: url("{% static 'images/bg1.jpg' %}");
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+    }
+    h2.title{
+    font-family: 'Open Sans', sans-serif;
+    margin-left: 25px;
+   
+    }
+</style>
+
+
+
+<div class="container-fluid" style="background-color: rgb(7, 7, 7);height: 100px;opacity: .9;">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="navbar-brand text-danger fw-bold title mt-3" style=" font-size:45px;" href="#">QuestHub</h2>
+    </div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+      {% for message in messages %}
+      <h6 class="text-danger mt-5">{{message}}</h6>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="container">
+    <div class="card text-center mb-3 shadow-lg p-3 mb-5  rounded position-absolute top-50 start-50 translate-middle" style="width: 22rem;">
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <form method="post" action="{% url 'userlogin' %}" target="_self" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="container">
+
+              <h2 class="header" style="text-align: center;color: white;">LOGIN</h2><br>
+              <div class="form-group">
+                <label for="uname" class="text-white">Username*</label>
+                <input type="text" class="form-control" style="background: transparent;color: white;" id="uname"  name="uname" required>
+                    
+              </div><br>
+                
+              <div class="form-group">
+                <label for="pwd"  class="text-white">Password*</label>
+                <input type="password"  class="form-control" style="background: transparent; color: white;" id="pwd" name="pswd" required>
+                    
+              </div><br>
+                  
+              <button type='submit' class="btn btn-outline-dark" style=" color: rgb(255, 255, 255);margin-bottom: 5px;">Login</button></a>
+              <br><br>
+              <p class="text-white">New to QuestHub ?<br><a href="{% url 'registerpage' %}" style="color:rgb(255, 255, 255);">Register Now</a></p>
+                  
+                  
+      
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+
+  <script>
+
+    //  Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+    'use strict'
+    
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+    
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+    
+        form.classList.add('was-validated')
+      }, false)
+    })
+    })()
+    
+    
+  </script>
+
+  <style>
+    
+    .card{
+      border-radius: 10px;
+      border-color: rgb(255, 255, 255);
+      border-style: solid;
+      background-color: black;
+      opacity: .9;
+    }
+
+  </style>
+  <style>
+    h1,h5{
+    font-size: 2rem; /* default font size */
+    transition: font-size 0.2s ease-in-out; /* transition effect */
+    }
+  
+    h1:hover,h5:hover{
+    font-size: 2.4rem; /* larger font size on hover */
+    }
+    button{
+    font-size: 1.2rem; /* default font size */
+    transition: font-size 0.2s ease-in-out; /* transition effect */
+    }
+  
+    button:hover{
+    font-size: 1.2rem; /* larger font size on hover */
+
+    }
+    label,input,textarea{
+    font-size: 1rem; /* default font size */
+    transition: font-size 0.2s ease-in-out; /* transition effect */
+    
+    }
+  
+    label:hover,input:hover,textarea:hover{
+    font-size: 1.2rem; /* larger font size on hover */
+    
+    
+    }
+    a{
+    font-size: 1rem; /* default font size */
+    transition: font-size 0.2s ease-in-out; /* transition effect */
+    text-decoration:none ;    
+
+    }
+    a:hover{
+    font-size: 1.1rem; /* larger font size on hover */
+    text-decoration-line: underline;    
+    }
+    
+  </style>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-transparent ">
     <div class="container-fluid">
-      <a class="navbar-brand text-danger fw-bold" href="" style="font-family: 'Open Sans', sans-serif;">QuestHub</a>
+      <a class="navbar-brand text-danger fw-bold" href="" style="font-family: 'Open Sans', sans-serif;font-size: x-large;"><strong>QuestHub</strong></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -12,16 +12,22 @@
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-              <a class="nav-link custom" aria-current="page" href="">Home</a>
+              <a class="nav-link custom" aria-current="page" href=""><i class="fa fa-home"></i> Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link custom" href="#">About</a>
+              <a class="nav-link custom" href="#">About Us</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle custom" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Profile
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Welcome...!<span class="text-danger ms-2"><strong>{{userdata.username}}</strong></span></a></li>
+                
+              </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link custom" href="#">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link custom" href="#">Logout</a>
+                <a class="nav-link custom" href="{% url 'userlogout' %}">Logout</a>
             </li>
             
           </ul>
