@@ -14,7 +14,19 @@ class Registerprofile(models.Model):
     active_status = models.IntegerField(default=0)
 
 class Questions(models.Model):
-    user=models.ForeignKey(Registerprofile,on_delete=models.CASCADE, null=True,default='')
-    question=models.TextField()
-    date = models.DateField(auto_now_add=True,null=True)
-    time = models.TimeField(auto_now_add=True,null=True)
+    user=models.ForeignKey(Registerprofile,on_delete=models.CASCADE,default='',null=True,blank=True)
+    question=models.TextField(null=True,blank=True)
+    date = models.DateField(auto_now_add=True,null=True,blank=True)
+    time = models.TimeField(auto_now_add=True,null=True,blank=True)
+
+
+class Answer(models.Model):
+    user = models.ForeignKey(Registerprofile, on_delete=models.CASCADE)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
+    answer_text = models.TextField()
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+    likes = models.ManyToManyField(Registerprofile, related_name='like_answers', blank=True)
+
+    def like_count(self):
+        return self.likes.count()

@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+QuestHub-Home
+{% endblock %}
+
+{% block body %}
+
+<section id="section1">
+    <div class="container mt-lg-2">
+        {% include 'navbar.html' %}
+    </div>
+    <div class="container">
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <div id="success-message" class="hide-message">
+                {% for message in messages %}
+                <h6 class="text-success ms-5">{{ message }}</h6>
+                {% endfor %}
+            </div>
+          </div>
+        </div>
+    </div>
+</section>
+
+<section id="2">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8"> 
+                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+                    
+                    <div class="card-body">
+                        <div class="chip">
+                            <img src="{% static 'images/dp.jpg' %}" alt="Person" width="96" height="96">
+                            <span class="text-danger">{{question.user.username}}</span>
+                        </div>
+                        <p class="ms-2" style="font-size: small;">Posted on {{question.date}}</p>
+                        <h6><strong>{{question.question}}</strong></h6>
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+    {% if answers %}
+    <div class="container mt-2">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8"> 
+                <p>All answers</p>
+                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+                    
+                    {% for answer in answers %}
+                    <div class="card-body">
+                        <div class="chip">
+                            <img src="{% static 'images/dp.jpg' %}" alt="Person" width="96" height="96">
+                            <span class="text-danger">{{answer.user.username}}</span>
+                        </div>
+                        <p class="ms-2" style="font-size: small;">Posted on {{answer.date}}</p>
+                        <h6><strong>{{answer.answer_text}}</strong></h6>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                {% if answer.user.id == user_id %}
+                                <button class="like-button btn btn-outline-danger  w-25" data-answerid="{{ answer.id }}" disabled> <i class="fa fa-heart fa-1x"></i></button>
+                                <span class="like-count">Likes : <strong class="text-danger">{{ answer.like_count }}</strong></span>
+                                {% else %}
+                                <button class="like-button btn btn-outline-danger  w-25" data-answerid="{{ answer.id }}"><i class="fa fa-heart fa-1x"></i></button>
+                                <span class="like-count ms-2">Likes : <strong class="text-danger">{{ answer.like_count }}</strong></span>
+                                {% endif %}
+
+                                
+                            </div>
+                            <div class="col-md-6">
+                                
+                            </div>
+                        </div>
+                        
+                      
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+    {% endif %}
+
+    
+</section>
+
+<section id="footer" class="mt-5">
+    {% include 'footer.html' %}
+</section>
+
+<style>
+    .hide-message {
+        display: none;
+    }
+</style>
+
+<script>
+    // Wait for the DOM to be ready
+    document.addEventListener("DOMContentLoaded", function () {
+        // Select the success message div
+        const successMessage = document.getElementById("success-message");
+
+        // Show the message
+        successMessage.style.display = "block";
+
+        // Hide the message after 10 seconds
+        setTimeout(function () {
+            successMessage.style.display = "none";
+        }, 2000); // 10,000 milliseconds = 10 seconds
+    });
+</script>
+
+<style>
+    .chip {
+        display: inline-block;
+        padding: 0 25px;
+        height: 50px;
+        font-size: 16px;
+        line-height: 50px;
+        border-radius: 25px;
+        background-color: #f1f1f1;
+    }
+
+    .chip img {
+        float: left;
+        margin: 0 10px 0 -25px;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".like-button").on("click", function() {
+            const button = $(this);
+            const answerId = button.data("answerid");
+            const likeCountElement = button.siblings(".like-count");
+
+            $.ajax({
+                type: "GET",
+                url: `/Like-answer/${answerId}/`,  
+                data: {},
+                success: function(data) {
+                    if (data.success) {
+                        likeCountElement.text("Likes: " + data.like_count);
+                        button.prop("disabled", true);  // Disable the like button after liking
+                    } else {
+                        console.error("Failed to like answer: " + data.error);
+                    }
+                },
+                error: function() {
+                    console.error("AJAX request failed.");
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

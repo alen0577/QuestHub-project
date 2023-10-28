@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}
 QuestHub-Home
 {% endblock %}
@@ -12,8 +13,8 @@ QuestHub-Home
     <div class="container">
         <div class="row">
           <div class="col-md-4"></div>
-          <div class="col-md-5"></div>
-          <div class="col-md-3">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
             <div id="success-message" class="hide-message">
                 {% for message in messages %}
                 <h6 class="text-success ms-5">{{ message }}</h6>
@@ -21,7 +22,7 @@ QuestHub-Home
             </div>
           </div>
         </div>
-      </div>
+    </div>
 </section>
 
 <section id="2">
@@ -32,9 +33,9 @@ QuestHub-Home
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     
                     <div class="card-body">
-                        <form action="" method="post">
+                        <form action="{% url 'askquestion' %}" method="post">
                             {% csrf_token %}
-                            <textarea name="question" class="form-control mt-2" id="" rows="2" placeholder="What do you want to ask others?"></textarea>
+                            <textarea name="question" class="form-control mt-2" id="" rows="2" placeholder="What do you want to ask others?" required></textarea>
                             <button  type="submit" class="btn btn-outline-danger btn-sm mt-3">Post<i class="fas fa-paper-plane ms-2"></i></button>
                         </form>
                       
@@ -45,22 +46,84 @@ QuestHub-Home
         </div>
     </div>
 
-
+    {% if questions %}
     <div class="container mt-2">
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8"> 
+                <p>Latest</p>
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     
+                    {% for question in questions %}
                     <div class="card-body">
+                        <div class="chip">
+                            <img src="{% static 'images/dp.jpg' %}" alt="Person" width="96" height="96">
+                            <span class="text-danger">{{question.user.username}}</span>
+                        </div>
+                        <p class="ms-2" style="font-size: small;">Posted on {{question.date}}</p>
+                        <h6><strong>{{question.question}}</strong></h6>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                {% if question.user.id == user_id  %}
+                                <button class="btn btn-outline-danger btn-sm" disabled><i class="fa fa-pen-alt"></i>Answer</button>
+                                {% else %}
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#answermodal{{question.id}}">
+                                    <i class="fa fa-pen-alt"></i>Answer
+                                </button>
+                                {% endif %}
+
+                            </div>
+                            <div class="col-md-6">
+                                <a href="{% url 'view_answers' question.id %}" style="text-decoration: none;"><button class="btn btn-outline-danger btn-sm">View Answers</button></a>
+
+                            </div>
+                        </div>
                         
                       
                     </div>
+                    <hr>
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-md-2"></div>
         </div>
     </div>
+    {% endif %}
+
+
+    <!-- modal for answer submission -->
+    <!-- Button trigger modal -->
+   
+    
+    <!-- Modal -->
+    {% for question in questions %}
+    <div class="modal fade" id="answermodal{{question.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            
+            <form method="post" action="{% url 'submit_answer' question.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <textarea class="form-control" name="answer_text" rows="2" placeholder="Type your answer..."></textarea>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-8"></div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-outline-danger btn-sm text-center">Submit</button>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                
+            </form>
+        </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
     
 </section>
 
@@ -90,6 +153,24 @@ QuestHub-Home
     });
 </script>
 
+<style>
+    .chip {
+        display: inline-block;
+        padding: 0 25px;
+        height: 50px;
+        font-size: 16px;
+        line-height: 50px;
+        border-radius: 25px;
+        background-color: #f1f1f1;
+    }
 
+    .chip img {
+        float: left;
+        margin: 0 10px 0 -25px;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+</style>
 
 {% endblock %}
