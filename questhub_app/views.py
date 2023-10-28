@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
+# register page
 
 def registerpage(request):
     return render(request,'register.html') 
@@ -33,7 +34,9 @@ def register_save(request):
 
     else:
         return redirect('registerpage')    
-   
+
+
+# login page
 
 def loginpage(request):
     return render(request,'login.html')    
@@ -76,6 +79,8 @@ def userlogout(request):
     return redirect('loginpage')
 
 
+# home page
+
 def index(request):
     if 'user_id' in request.session:
         if request.session.has_key('user_id'):
@@ -94,6 +99,10 @@ def index(request):
         }
 
     return render(request, 'index.html', context)
+
+
+
+# ask a question section
 
 def askquestion(request):
     if 'user_id' in request.session:
@@ -114,6 +123,8 @@ def askquestion(request):
     else:
         return redirect('/')
 
+
+# submit answer to a question
 
 def submit_answer(request,pk):
     if 'user_id' in request.session:
@@ -142,6 +153,9 @@ def submit_answer(request,pk):
     else:
         return redirect('/')
 
+
+# View answers of a question
+
 def view_answers(request,pk):
     if 'user_id' in request.session:
         if request.session.has_key('user_id'):
@@ -163,6 +177,8 @@ def view_answers(request,pk):
         }
     return render(request,'answers.html',context)
 
+
+# like answers
 
 def like_answer(request, answer_id):
     if 'user_id' in request.session:
